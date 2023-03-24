@@ -34,7 +34,7 @@ const handleChange = (e) => {
 
 const handleSubmit = async (e) => { 
     e.preventDefault(); 
-    type === 'edit' ? await editData(contact) : await createNewContact( ); // crea un nuevo usuario, pero no me renderiza el nuevo usuario en la página, sólo cuando doy un refresh
+    type === 'edit' ? await editData(contact) : await createNewContact(contact); 
     navigate('/'); 
 }; 
 
