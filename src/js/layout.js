@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 
 import Home from "./views/home.jsx";
-import Form from "./views/form.jsx";
+import Form from "./views/form.jsx"
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -21,7 +21,7 @@ const Layout = () => {
 					<Navbar />
 					<Routes>
 						<Route path="/" element={<Home />} />
-						<Route path="/form" element={<Form />} />
+						<Route path="/form/:type" element={<Form />} />
 						<Route path="*" element={<h1>Not found!</h1>} />
 					</Routes>
 				</ScrollToTop>

@@ -1,40 +1,61 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Context } from "../store/appContext.js";
+import { createNewContact, editData } from "../service/index.js"
+import { useParams } from 'react-router-dom'; 
 
+
+const initialState = {
+    agenda_slug: "enrique_ibarra",
+    full_name: "",
+    email: "",
+    address: "",
+    phone: "",
+  };
 
 const Form = () => {
 
-const [contact, setContact] = useState(); 
+const [contact, setContact] = useState(initialState);
+const { type } = useParams(); 
+const {store, actions} = useContext(Context); 
+const navigate = useNavigate(); 
 
+useEffect(() => {
+    if (type === 'edit') {
+        setContact(store.contact); 
+    }
+}, []); 
+ 
 const handleChange = (e) => {
     const value = e.target.value;
-    const name = e.target.name; 
-    setContact({...contact, [name]: value}); 
+    const name = e.target.name;  
+    setContact({...contact, [name]: value});   
 }; 
 
-const sendData = (e) => {
+const handleSubmit = async (e) => { 
     e.preventDefault(); 
-    console.log(contact);
+    type === 'edit' ? await editData(contact) : await createNewContact( ); // crea un nuevo usuario, pero no me renderiza el nuevo usuario en la página, sólo cuando doy un refresh
+    navigate('/'); 
 }; 
 
     return (
         <div className="container">
-            <form onSubmit={sendData} onChange={handleChange}>
+            <form onChange={handleChange} onSubmit={handleSubmit} >
                 <div className="mb-3">
                     <label className="form-label">Full Name</label>
-                    <input name="fullname" type="text" className="form-control" placeholder="Full Name" aria-describedby="emailHelp" />
+                    <input name="full_name" type="text" className="form-control" placeholder="Full Name" defaultValue = {contact.full_name} aria-describedby="emailHelp" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Email</label>
-                    <input name="email" type="email" className="form-control" placeholder="Enter email" aria-describedby="nameHelp" />
+                    <input name="email" type="email" className="form-control" placeholder="Enter email" defaultValue = {contact.email} aria-describedby="nameHelp" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Address</label>
-                    <input name="address" type="text" className="form-control" placeholder="Enter address" aria-describedby="addresslHelp" />
+                    <input name="address" type="text" className="form-control" placeholder="Enter address" defaultValue = {contact.address} aria-describedby="addresslHelp" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label" >Phone</label>
-                    <input name="phone" type="text" className="form-control" placeholder="Enter Phone" aria-describedby="phonelHelp" />
+                    <input name="phone" type="text" className="form-control" placeholder="Enter Phone" defaultValue = {contact.phone} aria-describedby="phonelHelp" />
                 </div>
                 <input type="submit" className="btn btn-primary" value="send"/>
             </form>
